@@ -1,0 +1,23 @@
+{
+  "name": "weather-ai-api",
+  "version": "1.0.0",
+  "description": "API cuaca berbasis AI menggunakan Weather API + OpenRouter",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.12.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2",
+    "nodemon": "^3.1.4"
+  }
+}
