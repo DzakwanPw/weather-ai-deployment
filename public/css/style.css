@@ -206,9 +206,8 @@ main {
 .weather-hero .glyph { font-size: 3rem; line-height: 1; }
 .weather-hero .temp { font-size: 2.2rem; font-weight: 700; font-family: 'Quicksand', sans-serif; }
 .weather-hero .kota { font-size: 1rem; color: #5b6478; }
-.stat-row { display: flex; gap: 12px; margin-bottom: 18px; }
-.stat {
-  flex: 1;
+.stat-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.stat { min-width: calc(50% - 6px); flex: 1;
   background: #f5f7fc;
   border-radius: 10px;
   padding: 12px;

@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('res-feels').textContent = `${Math.round(cuaca.feels_like)}°C`;
     document.getElementById('res-humidity').textContent = `${cuaca.humidity}%`;
     document.getElementById('res-pressure').textContent = `${cuaca.pressure} hPa`;
+    document.getElementById('res-wind').textContent = cuaca.wind_direction || '-';
     document.getElementById('res-ai').innerHTML = renderMarkdownLite(log.respon_ai);
 
     resultCard.style.display = 'block';

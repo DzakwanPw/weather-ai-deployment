@@ -9,6 +9,12 @@ const AI_MODELS = [
   "openai/gpt-oss-20b:free"
 ];
 
+function windDirectionLabel(deg) {
+  const arah = ["Utara", "Timur Laut", "Timur", "Tenggara", "Selatan", "Barat Daya", "Barat", "Barat Laut"];
+  const index = Math.round(deg / 45) % 8;
+  return arah[index];
+}
+
 async function callOpenRouterWithFallback(messages) {
   for (const model of AI_MODELS) {
     try {
@@ -51,16 +57,17 @@ async function cariCuaca(req, res) {
     }
 
     // 2. Kirim data cuaca ke OpenRouter supaya dijelaskan natural (dengan fallback model)
+    const arahAngin = windDirectionLabel(weatherData.wind.deg);
     const responAI = await callOpenRouterWithFallback([
-      { role: "system", content: "Kamu asisten cuaca yang ramah, jawab singkat dalam Bahasa Indonesia." },
-      { role: "user", content: `Jelaskan cuaca berikut dengan santai: suhu ${weatherData.main.temp}°C, terasa seperti ${weatherData.main.feels_like}°C, kondisi ${weatherData.weather[0].description}, kelembapan ${weatherData.main.humidity}%, kecepatan angin ${weatherData.wind.speed} m/s` }
+      { role: "system", content: "Kamu asisten cuaca yang ramah, jawab singkat dalam Bahasa Indonesia. Jangan mengarang informasi lokasi spesifik yang tidak ada di data (misal nama wilayah/kecamatan tertentu yang lebih panas), cukup jelaskan kondisi umum kota secara keseluruhan." },
+      { role: "user", content: `Jelaskan cuaca berikut dengan santai: suhu ${weatherData.main.temp}°C, terasa seperti ${weatherData.main.feels_like}°C, kondisi ${weatherData.weather[0].description}, kelembapan ${weatherData.main.humidity}%, kecepatan angin ${weatherData.wind.speed} m/s dari arah ${arahAngin}` }
     ]);
 
     // 3. Simpan ke database
     const log = await QueryLog.create({
       user_id: userId,
       kota,
-      data_cuaca: JSON.stringify(weatherData.main),
+      data_cuaca: JSON.stringify({ ...weatherData.main, wind_speed: weatherData.wind.speed, wind_deg: weatherData.wind.deg, wind_direction: arahAngin, description: weatherData.weather[0].description }),
       respon_ai: responAI
     });
 
