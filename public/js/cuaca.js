@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   requireAuth();
   greetUser();
   initLogoutButton();
+  loadCityGlances();
 
   const form = document.getElementById('form-cuaca');
   const input = document.getElementById('kota-input');
@@ -52,8 +53,23 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('res-feels').textContent = `${Math.round(cuaca.feels_like)}°C`;
     document.getElementById('res-humidity').textContent = `${cuaca.humidity}%`;
     document.getElementById('res-pressure').textContent = `${cuaca.pressure} hPa`;
-    document.getElementById('res-ai').textContent = log.respon_ai;
+    document.getElementById('res-ai').innerHTML = renderMarkdownLite(log.respon_ai);
 
     resultCard.style.display = 'block';
+  }
+
+  async function loadCityGlances() {
+    const cards = document.querySelectorAll('.city-card[data-city]');
+    for (const card of cards) {
+      const kota = card.dataset.city;
+      try {
+        const res = await apiFetch(`/cuaca/preview?kota=${encodeURIComponent(kota)}`, { method: 'GET' });
+        const glyph = weatherGlyph(res.data.description || '');
+        card.querySelector('.glyph').textContent = glyph;
+        card.querySelector('.temp').textContent = `${Math.round(res.data.temp)}°C`;
+      } catch (err) {
+        card.querySelector('.temp').textContent = '-';
+      }
+    }
   }
 });

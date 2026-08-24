@@ -71,6 +71,21 @@ function formatTanggal(iso) {
   });
 }
 
+// Render markdown ringan dari respon AI: **tebal** dan poin "*" jadi bullet rapi
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+function renderMarkdownLite(str = '') {
+  let s = escapeHtml(str);
+  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/\s\*\s/g, '<br>• ');
+  s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  return s;
+}
+
 function initLogoutButton() {
   const btn = document.querySelector('[data-logout]');
   if (!btn) return;

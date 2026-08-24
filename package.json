@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "API cuaca berbasis AI menggunakan Weather API + OpenRouter",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
-  },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",

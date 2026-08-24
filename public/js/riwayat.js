@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="info">
           <div class="kota">${log.kota} · ${Math.round(cuaca.temp)}°C</div>
           <div class="time">${formatTanggal(log.createdAt)}</div>
-          <div class="snippet">${log.respon_ai}</div>
+          <div class="snippet">${renderMarkdownLite(log.respon_ai)}</div>
         </div>
       `;
       list.appendChild(item);

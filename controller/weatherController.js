@@ -27,7 +27,7 @@ async function cariCuaca(req, res) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "openrouter/free",
+        model: "nvidia/nemotron-3-ultra-550b-a55b:free",
         messages: [
           { role: "system", content: "Kamu asisten cuaca yang ramah, jawab singkat dalam Bahasa Indonesia." },
           { role: "user", content: `Jelaskan cuaca berikut dengan santai: suhu ${weatherData.main.temp}°C, terasa seperti ${weatherData.main.feels_like}°C, kondisi ${weatherData.weather[0].description}, kelembapan ${weatherData.main.humidity}%, kecepatan angin ${weatherData.wind.speed} m/s` }
@@ -87,4 +87,33 @@ async function getRiwayatById(req, res) {
   }
 }
 
-module.exports = { cariCuaca, getRiwayat, getRiwayatById };
+async function previewCuaca(req, res) {
+  try {
+    const { kota } = req.query;
+    if (!kota) {
+      return res.status(400).json({ message: "kota wajib diisi." });
+    }
+
+    const weatherRes = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(kota)}&appid=${process.env.WEATHER_API_KEY}&units=metric&lang=id`
+    );
+    const weatherData = await weatherRes.json();
+
+    if (weatherData.cod !== 200) {
+      return res.status(400).json({ message: "Kota tidak ditemukan." });
+    }
+
+    return res.status(200).json({
+      data: {
+        kota: weatherData.name,
+        temp: weatherData.main.temp,
+        description: weatherData.weather[0].description
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Gagal mengambil preview cuaca." });
+  }
+}
+
+module.exports = { cariCuaca, getRiwayat, getRiwayatById, previewCuaca };

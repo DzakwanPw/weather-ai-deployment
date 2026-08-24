@@ -12,6 +12,7 @@ router.post("/login", authController.login);
 // Cuaca + AI (perlu token)
 router.post("/cuaca", authMiddleware, weatherController.cariCuaca);
 router.get("/cuaca", authMiddleware, weatherController.getRiwayat);
+router.get("/cuaca/preview", authMiddleware, weatherController.previewCuaca);
 router.get("/cuaca/:id", authMiddleware, weatherController.getRiwayatById);
 
 module.exports = router;
