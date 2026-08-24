@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Riwayat — Weather AI Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="glyph">🌤️</span> Weather AI Assistant</div>
+  <nav>
+    <a href="cuaca.html">Cari cuaca</a>
+    <a href="riwayat.html" class="active">Riwayat</a>
+    <button class="logout" data-logout>Keluar</button>
+  </nav>
+</div>
+
+<main>
+  <div class="shell wide">
+    <div class="card">
+      <p class="eyebrow">Halo, <span data-user-name>pengguna</span></p>
+      <h2>Riwayat pencarian</h2>
+      <p class="subtitle">Semua kota yang pernah kamu cari, beserta penjelasan cuaca dari AI.</p>
+
+      <div id="riwayat-loading" style="text-align:center; padding:24px 0; color:#8089a0;">
+        <span class="loader"></span> Memuat riwayat...
+      </div>
+
+      <div id="riwayat-empty" class="empty" style="display:none">
+        <span class="glyph">🗂️</span>
+        <p class="empty-text">Belum ada riwayat pencarian. Coba cari cuaca kota favoritmu.</p>
+      </div>
+
+      <div id="riwayat-list"></div>
+    </div>
+  </div>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/riwayat.js"></script>
+</body>
+</html>

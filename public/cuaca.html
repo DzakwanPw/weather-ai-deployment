@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cari Cuaca — Weather AI Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="glyph">🌤️</span> Weather AI Assistant</div>
+  <nav>
+    <a href="cuaca.html" class="active">Cari cuaca</a>
+    <a href="riwayat.html">Riwayat</a>
+    <button class="logout" data-logout>Keluar</button>
+  </nav>
+</div>
+
+<main>
+  <div class="shell">
+    <div class="card">
+      <p class="eyebrow">Halo, <span data-user-name>pengguna</span></p>
+      <h2>Cari informasi cuaca</h2>
+      <p class="subtitle">Masukkan nama kota, sistem akan mengambil data cuaca terkini dan menjelaskannya dengan bahasa yang mudah dipahami.</p>
+
+      <div id="cuaca-msg" class="msg"></div>
+
+      <form id="form-cuaca">
+        <div class="field">
+          <label for="kota-input">Nama kota</label>
+          <input type="text" id="kota-input" placeholder="Contoh: Yogyakarta" required />
+        </div>
+        <button type="submit" class="btn">Cari cuaca</button>
+      </form>
+    </div>
+
+    <div class="card" id="result-card" style="display:none">
+      <div class="weather-hero">
+        <div class="glyph" id="res-glyph">🌤️</div>
+        <div>
+          <div class="temp" id="res-temp">--°C</div>
+          <div class="kota" id="res-kota">-</div>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="val" id="res-feels">-</div><div class="lbl">Terasa</div></div>
+        <div class="stat"><div class="val" id="res-humidity">-</div><div class="lbl">Kelembapan</div></div>
+        <div class="stat"><div class="val" id="res-pressure">-</div><div class="lbl">Tekanan</div></div>
+      </div>
+      <p class="subtitle" style="margin-bottom:12px" id="res-desc"></p>
+      <div class="ai-box">
+        <div class="lbl">Penjelasan AI</div>
+        <div id="res-ai">-</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/cuaca.js"></script>
+</body>
+</html>

@@ -1,12 +1,65 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Weather AI Assistant</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Masuk — Weather AI Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <h1>Weather AI Assistant</h1>
-  <p>Ini frontend sederhana, bisa dikembangkan sendiri (HTML/CSS/JS bebas).</p>
-  <p>Backend-nya diakses lewat endpoint <code>/api/...</code>.</p>
+
+<div class="topbar">
+  <div class="brand"><span class="glyph">🌤️</span> Weather AI Assistant</div>
+</div>
+
+<main>
+  <div class="shell">
+    <div class="card">
+      <p class="eyebrow">Selamat datang</p>
+      <h2>Masuk ke akun kamu</h2>
+      <p class="subtitle">Dapatkan info cuaca kota mana pun, dijelaskan oleh AI.</p>
+
+      <div class="tabs">
+        <button id="tab-login" class="active" type="button">Masuk</button>
+        <button id="tab-register" type="button">Daftar</button>
+      </div>
+
+      <div id="auth-msg" class="msg"></div>
+
+      <form id="form-login">
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="login-password">Kata sandi</label>
+          <input type="password" id="login-password" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn">Masuk</button>
+      </form>
+
+      <form id="form-register" style="display:none">
+        <div class="field">
+          <label for="reg-nama">Nama</label>
+          <input type="text" id="reg-nama" required autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="reg-password">Kata sandi</label>
+          <input type="password" id="reg-password" required minlength="6" autocomplete="new-password" />
+        </div>
+        <button type="submit" class="btn">Daftar</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
 </body>
 </html>
