@@ -1,5 +1,36 @@
 const { QueryLog } = require("../models");
 
+// Beberapa model gratis OpenRouter, dicoba berurutan.
+// Kalau model pertama gagal/tidak stabil, otomatis coba model berikutnya
+// tanpa perlu user klik ulang manual.
+const AI_MODELS = [
+  "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "google/gemma-4-26b-a4b-it:free",
+  "openai/gpt-oss-20b:free"
+];
+
+async function callOpenRouterWithFallback(messages) {
+  for (const model of AI_MODELS) {
+    try {
+      const aiRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ model, messages })
+      });
+      const aiData = await aiRes.json();
+      const content = aiData?.choices?.[0]?.message?.content;
+      if (content) return content;
+      console.warn(`Model ${model} gagal:`, aiData?.error?.message || "respons kosong");
+    } catch (err) {
+      console.warn(`Model ${model} error:`, err.message);
+    }
+  }
+  return "AI sedang sibuk, coba lagi dalam beberapa saat.";
+}
+
 async function cariCuaca(req, res) {
   try {
     const { kota } = req.body;
@@ -19,23 +50,11 @@ async function cariCuaca(req, res) {
       return res.status(400).json({ message: "Kota tidak ditemukan.", detail: weatherData.message });
     }
 
-    // 2. Kirim data cuaca ke OpenRouter supaya dijelaskan natural
-    const aiRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "nvidia/nemotron-3-ultra-550b-a55b:free",
-        messages: [
-          { role: "system", content: "Kamu asisten cuaca yang ramah, jawab singkat dalam Bahasa Indonesia." },
-          { role: "user", content: `Jelaskan cuaca berikut dengan santai: suhu ${weatherData.main.temp}°C, terasa seperti ${weatherData.main.feels_like}°C, kondisi ${weatherData.weather[0].description}, kelembapan ${weatherData.main.humidity}%, kecepatan angin ${weatherData.wind.speed} m/s` }
-        ]
-      })
-    });
-    const aiData = await aiRes.json();
-    const responAI = aiData?.choices?.[0]?.message?.content || "AI tidak memberikan respon.";
+    // 2. Kirim data cuaca ke OpenRouter supaya dijelaskan natural (dengan fallback model)
+    const responAI = await callOpenRouterWithFallback([
+      { role: "system", content: "Kamu asisten cuaca yang ramah, jawab singkat dalam Bahasa Indonesia." },
+      { role: "user", content: `Jelaskan cuaca berikut dengan santai: suhu ${weatherData.main.temp}°C, terasa seperti ${weatherData.main.feels_like}°C, kondisi ${weatherData.weather[0].description}, kelembapan ${weatherData.main.humidity}%, kecepatan angin ${weatherData.wind.speed} m/s` }
+    ]);
 
     // 3. Simpan ke database
     const log = await QueryLog.create({
