@@ -37,7 +37,9 @@ async function apiFetch(path, options = {}) {
   let data = null;
   try { data = await res.json(); } catch (e) { /* no body */ }
 
-  if (res.status === 401) {
+  if (res.status === 401 && token) {
+    // Sesi habis/token tidak valid — hanya berlaku untuk request yang memang mengirim token.
+    // Untuk login/register (tidak ada token dikirim), 401 berarti kredensial salah, bukan sesi habis.
     clearSession();
     window.location.href = 'index.html';
     return null;
